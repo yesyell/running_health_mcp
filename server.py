@@ -2,16 +2,14 @@
 import os
 import json
 import asyncio
-from typing import Any, Dict
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool
 
 from tools import health_query, health_interpret, health_report, running_recommend
 
 from pathlib import Path
-import json
 
 BASE_DIR = Path(__file__).resolve().parent
 CONTEXT_DIR = BASE_DIR / "context"
@@ -57,7 +55,10 @@ async def call_tool(name: str, arguments: dict):
     # ✅ Claude가 기대하는 tool result 형태로 감싸기
     return {
         "content": [
-            TextContent(type="text", text=json.dumps(result, ensure_ascii=False))
+            {
+                "type": "text",
+                "text": json.dumps(result, ensure_ascii=False, default=str),
+            }
         ]
     }
 
