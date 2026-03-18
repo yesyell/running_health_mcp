@@ -9,6 +9,7 @@ from mcp.server.stdio import stdio_server
 from mcp.types import Tool
 
 from pathlib import Path
+from context.analysis_guidelines import GUIDELINES
 
 BASE_DIR = Path(__file__).resolve().parent
 CONTEXT_DIR = BASE_DIR / "context"
@@ -17,6 +18,7 @@ TOOL_MODULES = {
     "health_interpret": "tools.health_interpret",
     "health_report": "tools.health_report",
     "running_recommend": "tools.running_recommend",
+    "health_insight": "tools.health_insight",
 }
 
 def _load_json(path: Path):
@@ -53,7 +55,7 @@ async def list_tools():
 
 @app.call_tool()
 async def call_tool(name: str, arguments: dict):
-    ctx = {"concepts": CONCEPTS, "user": USER, "db": DB_PATH}
+    ctx = {"concepts": CONCEPTS, "user": USER, "db": DB_PATH, "guidelines": GUIDELINES}
 
     try:
         module = _load_tool_module(name)
